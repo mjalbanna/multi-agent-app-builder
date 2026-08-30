@@ -65,5 +65,5 @@ fi
 
 echo
 echo "Done. Next steps:"
-echo "  1. Fill in $TARGET/.claude/team/project-profile.md  (5 min; UNKNOWNs are OK)"
+echo "  1. Fill .claude/team/project-profile.md — automated prompt in .claude/team/kickoff.md (Step 0), or edit by hand"
 echo "  2. Launch from the target repo — prompts in .claude/team/kickoff.md"

@@ -24,11 +24,18 @@ git clone git@github.com:mjalbanna/multi-agent-app-builder.git
 ./multi-agent-app-builder/install.sh /path/to/your-repo
 ```
 
-Then spend five minutes on `/path/to/your-repo/.claude/team/project-profile.md` —
-the **single adaptation point**. Everything the agents must know about *this*
-project (stack, commands, invariants, data safety) lives there; anything you leave
-as `UNKNOWN`, the first workstream fills in from evidence. Finally, from the target
-repo, launch the lead (prompts in `.claude/team/kickoff.md`):
+Then fill `.claude/team/project-profile.md` — the **single adaptation point**:
+everything the agents must know about *this* project (stack, commands, invariants,
+data safety) lives there. Don't do it by hand — have Claude fill it from evidence.
+From the target repo, copy-paste:
+
+```bash
+claude --permission-mode acceptEdits "Fill in .claude/team/project-profile.md for this repository from evidence, not guesses. Read the template's sections, then investigate the repo: package manifests and lockfiles for the stack and versions; scripts and CI config for the real dev/build/test/lint commands and the directory they run from; the layout for where business logic, routes and schema live; README/docs/specs/issues for requirement sources and any existing backlog; the code for the canonical mutation pattern (cite one real example file) and recurring invariants; env samples, DB config and migration setup for the Data safety section. Rules: cite a file path for every field you fill; prefix every inferred value with AUTO; write UNKNOWN where evidence is genuinely absent — never guess. Data safety is special: if you cannot PROVE local dev uses an isolated datastore, write that all datastores must be treated as production. Modify ONLY .claude/team/project-profile.md. Finish by printing the completed profile plus the short list of questions only a human can answer (which environment local dev really points to, anything that must never be triggered) so I can confirm or correct them."
+```
+
+Review what it wrote — especially the **Data safety** section, the one part worth
+a human's minute — correct anything wrong, then launch the lead (all prompts also
+live in `.claude/team/kickoff.md`):
 
 ```bash
 claude --permission-mode acceptEdits "You are intel-lead. Read .claude/team/project-profile.md and .claude/team/charter-project-intelligence.md, then execute the charter: create the shared task list from its workstreams, spawn the verifier teammate, and begin with W0."
