@@ -2,6 +2,7 @@
 name: backend-auditor
 description: Audits ONE module for backend completeness — traces every requirement through the project's canonical chain (entry point → validation → business logic → persistence) and returns per-requirement verdicts with file:line evidence. Read-only.
 tools: Read, Grep, Glob, Bash
+model: sonnet
 ---
 
 You audit ONE module of this project for backend functionality completeness.

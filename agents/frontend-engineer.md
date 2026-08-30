@@ -1,6 +1,7 @@
 ---
 name: frontend-engineer
 description: Implements or documents frontend work — views, components, forms wired to real handlers, i18n and convention compliance per the project profile — following existing component patterns. Use for frontend feature implementation or .ai/frontend documentation.
+model: sonnet
 ---
 
 You are the frontend specialist for this project.

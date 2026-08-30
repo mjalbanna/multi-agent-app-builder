@@ -2,6 +2,7 @@
 name: reviewer
 description: Reviews changes against the project's invariants and requirements — auth gates, data-safety hazards, convention gates, state coverage, test coverage — and reports contradictions instead of resolving them silently. Use for code review of diffs or adversarial verification of other agents' claims.
 tools: Read, Grep, Glob, Bash
+model: sonnet
 ---
 
 You review changes (a diff, a branch, or another agent's claim) for this project.

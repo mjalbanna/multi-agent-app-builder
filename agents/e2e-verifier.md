@@ -1,6 +1,7 @@
 ---
 name: e2e-verifier
 description: Live-verifies ONE flow end-to-end in a browser against the local dev server — walks the scripted flow, captures screenshot evidence, reports per-step pass/fail with console/network errors. Run one at a time; it owns the dev server and browser.
+model: sonnet
 ---
 
 You verify ONE flow of this project end-to-end in a real browser. Input: an

@@ -26,11 +26,12 @@ git clone git@github.com:mjalbanna/multi-agent-app-builder.git
 
 Then fill `.claude/team/project-profile.md` — the **single adaptation point**:
 everything the agents must know about *this* project (stack, commands, invariants,
-data safety) lives there. Don't do it by hand — have Claude fill it from evidence.
-From the target repo, copy-paste:
+data safety) lives there. Don't do it by hand — have Claude fill it from evidence:
+open a Claude Code session in the target repo (plain `claude`) and paste this
+prompt:
 
-```bash
-claude --permission-mode acceptEdits "Fill in .claude/team/project-profile.md for this repository from evidence, not guesses. Read the template's sections, then investigate the repo: package manifests and lockfiles for the stack and versions; scripts and CI config for the real dev/build/test/lint commands and the directory they run from; the layout for where business logic, routes and schema live; README/docs/specs/issues for requirement sources and any existing backlog; the code for the canonical mutation pattern (cite one real example file) and recurring invariants; env samples, DB config and migration setup for the Data safety section. Rules: cite a file path for every field you fill; prefix every inferred value with AUTO; write UNKNOWN where evidence is genuinely absent — never guess. Data safety is special: if you cannot PROVE local dev uses an isolated datastore, write that all datastores must be treated as production. Modify ONLY .claude/team/project-profile.md. Finish by printing the completed profile plus the short list of questions only a human can answer (which environment local dev really points to, anything that must never be triggered) so I can confirm or correct them."
+```text
+Fill in .claude/team/project-profile.md for this repository from evidence, not guesses. Read the template's sections, then investigate the repo: package manifests and lockfiles for the stack and versions; scripts and CI config for the real dev/build/test/lint commands and the directory they run from; the layout for where business logic, routes and schema live; README/docs/specs/issues for requirement sources and any existing backlog; the code for the canonical mutation pattern (cite one real example file) and recurring invariants; env samples, DB config and migration setup for the Data safety section. Rules: cite a file path for every field you fill; prefix every inferred value with AUTO; write UNKNOWN where evidence is genuinely absent — never guess. Data safety is special: if you cannot PROVE local dev uses an isolated datastore, write that all datastores must be treated as production. Modify ONLY .claude/team/project-profile.md. Finish by printing the completed profile plus the short list of questions only a human can answer (which environment local dev really points to, anything that must never be triggered) so I can confirm or correct them.
 ```
 
 Review what it wrote — especially the **Data safety** section, the one part worth
@@ -96,11 +97,16 @@ experimental flag (installer adds it), `tmux` optional but recommended on macOS.
 
 ## Models
 
-Every role ships with `model` unset = **inherit** whatever the lead session runs, so
-`claude --model …` at launch sets the whole team. To tier costs, pin a cheaper model
-per role in the agent file frontmatter (e.g. `model: sonnet` on the two auditors) and
-keep the lead, verifier and reviewer on your strongest model — a wrong "IMPLEMENTED"
-verdict costs more than the tokens it saves. Expect a full W0–W11 run on a mid-size
+Every role ships with **`model: sonnet`** in its frontmatter, so the IC fleet runs
+on Sonnet regardless of what the lead session uses. To change a role's model, edit
+the `model:` line at the top of its file — `agents/<role>.md` in this kit, or
+`.claude/agents/<role>.md` in a repo you've already installed into (the installer
+never overwrites existing files without `--force`). Valid values: `sonnet`,
+`opus`, `haiku`, a full model id, or `inherit` to follow the lead session. The
+lead and the verifier teammate are sessions, not agent files — set their model at
+launch with `claude --model …`. Worth the upgrade: `reviewer` does the
+adversarial verification, and a wrong CONFIRMED verdict costs more than the
+tokens Sonnet saves — consider `model: opus` there. Expect a full W0–W11 run on a mid-size
 repo to take hours and millions of tokens; scale the charter's scope down if that
 stings.
 

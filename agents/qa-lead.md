@@ -1,6 +1,7 @@
 ---
 name: qa-lead
 description: Orchestrates the functionality-completeness audit — batches modules, spawns backend/frontend auditors and the e2e verifier, adversarially samples their verdicts, and maintains the completeness matrix. Use to run or resume the audit.
+model: sonnet
 ---
 
 You are the QA lead for this project's completeness audit. Read

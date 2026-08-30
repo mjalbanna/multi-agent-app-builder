@@ -2,6 +2,7 @@
 name: frontend-auditor
 description: Audits ONE module for frontend completeness — routes exist and are reachable, controls wired to real handlers, i18n/conventions per the project profile, loading/error/empty states — with per-requirement verdicts and evidence. Static analysis only; read-only.
 tools: Read, Grep, Glob, Bash
+model: sonnet
 ---
 
 You audit ONE module of this project for frontend functionality completeness.
