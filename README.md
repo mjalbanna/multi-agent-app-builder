@@ -44,23 +44,32 @@ claude --permission-mode acceptEdits "You are intel-lead. Read .claude/team/proj
 
 ## Architecture
 
-```
-            you (30–50 prompts/day)
-             │  talk to the lead; read the report files
-             ▼
-   ┌─ intel-lead ─────────────┐     ┌─ verifier teammate ─┐
-   │ owns the task list,      │◀───▶│ adversarially       │
-   │ batches workstreams,     │ Send│ re-checks samples,  │
-   │ merges results           │ Msg │ liveness partner    │
-   └────┬─────────────────────┘     └─────────────────────┘
-        │ fans out (parallel, background)
-        ▼
-   backend-auditor · frontend-auditor · architect · database-expert
-   migration-expert · documentation-agent · reviewer · e2e-verifier (serial)
-        │
-        ▼
-   durable state = files, never chat:
-   .ai/reports/scan-progress.md · completeness matrix · shared task list
+```mermaid
+flowchart TD
+    U["👤 You<br/>30–50 prompts/day"] -->|"talk to the lead · read the reports"| L
+    L["intel-lead<br/>owns task list · batches work · merges results"]
+    V["verifier teammate<br/>re-derives samples · disputes · liveness partner"]
+    L <-->|SendMessage| V
+
+    L -->|"fan-out · parallel · background"| ICS
+
+    subgraph ICS["IC agents (default model: sonnet)"]
+        direction LR
+        BA[backend-auditor]
+        FA[frontend-auditor]
+        AR[architect]
+        DE[database-expert]
+        ME[migration-expert]
+        DOC[documentation-agent]
+        RV[reviewer]
+        E2E["e2e-verifier<br/>(one at a time)"]
+    end
+
+    ICS --> FILES
+    L --> FILES
+    V -.->|"DISPUTED(...) marks"| FILES
+
+    FILES[("Durable state = files, never chat<br/>scan-progress.md · completeness matrix · shared task list")]
 ```
 
 - **One team per repository.** To run several projects, install the kit in each and
