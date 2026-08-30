@@ -54,19 +54,11 @@ flowchart TD
     L -->|"fan-out · parallel · background"| ICS
 
     subgraph ICS["IC agents (default model: sonnet)"]
-        direction LR
-        BA[backend-auditor]
-        FA[frontend-auditor]
-        AR[architect]
-        DE[database-expert]
-        ME[migration-expert]
-        DOC[documentation-agent]
-        RV[reviewer]
-        E2E["e2e-verifier<br/>(one at a time)"]
+        BA[backend-auditor] ~~~ AR[architect] ~~~ ME[migration-expert] ~~~ RV[reviewer]
+        FA[frontend-auditor] ~~~ DE[database-expert] ~~~ DOC[documentation-agent] ~~~ E2E["e2e-verifier<br/>(one at a time)"]
     end
 
     ICS --> FILES
-    L --> FILES
     V -.->|"DISPUTED(...) marks"| FILES
 
     FILES[("Durable state = files, never chat<br/>scan-progress.md · completeness matrix · shared task list")]
